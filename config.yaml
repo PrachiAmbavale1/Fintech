@@ -1,0 +1,78 @@
+# FinTech Intelligence Agent — configuration
+# Edit YAML, not code, when the watchlist changes.
+
+companies:
+  banks:
+    - JPMorgan Chase
+    - Bank of America
+    - Citigroup
+    - Goldman Sachs
+    - Morgan Stanley
+    - HSBC
+    - Barclays
+    - UBS
+  asset_managers:
+    - BlackRock
+    - Vanguard
+    - State Street
+    - Fidelity
+    - Invesco
+    - Franklin Templeton
+
+topics:
+  include:
+    - acquisitions
+    - mergers
+    - partnerships
+    - artificial intelligence
+    - technology
+    - digital banking
+    - product launches
+    - regulation
+    - cybersecurity
+    - strategic investments
+    - leadership changes
+    - operational developments
+  exclude:
+    - share price
+    - stock movement
+    - stock price
+    - market rally
+    - market selloff
+    - earnings beat
+    - conference
+    - summit
+    - webinar
+    - general market commentary
+    - index performance
+
+settings:
+  max_articles: 7
+  lookback_hours: 24
+  min_relevance_score: 7.0
+  max_search_queries: 20
+  max_search_rounds: 2
+  min_stories_target: 5
+  retry_count: 2
+  email_hour: 9
+  email_minute: 0
+  # Brief says "9:00 AM" without timezone; default to India (IST).
+  # Change freely if the executive sits elsewhere.
+  timezone: Asia/Kolkata
+  dry_run: true
+
+ranking_weights:
+  relevance: 0.55
+  executive_relevance: 0.20
+  source_quality: 0.10
+  preference: 0.15
+
+source_quality:
+  Reuters: 1.0
+  Bloomberg: 1.0
+  "Financial Times": 0.95
+  "Wall Street Journal": 0.95
+  WSJ: 0.95
+  CNBC: 0.75
+  Forbes: 0.70
+  default: 0.55

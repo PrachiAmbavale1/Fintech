@@ -1,0 +1,110 @@
+[
+  {
+    "title": "JPMorgan Chase blueprint to become first fully AI-powered megabank",
+    "url": "https://www.cnbc.com/2025/09/30/jpmorgan-chase-fully-ai-connected-megabank.html",
+    "publication": "CNBC",
+    "company": "JPMorgan Chase",
+    "snippet": "JPMorgan is scaling its internal LLM Suite and agentic AI across research, markets, and client workflows as part of a firm-wide AI blueprint.",
+    "hours_ago": 4,
+    "query": "JPMorgan Chase artificial intelligence latest"
+  },
+  {
+    "title": "Goldman Sachs and BNY introduce money market fund digital tokens",
+    "url": "https://www.cnbc.com/2025/07/23/goldman-sachs-bny-money-market-fund-digital-tokens.html",
+    "publication": "CNBC",
+    "company": "Goldman Sachs",
+    "snippet": "Goldman Sachs and BNY created a path for institutions to buy tokenized money market funds, with BlackRock and Fidelity among early participants.",
+    "hours_ago": 6,
+    "query": "BlackRock product launches latest"
+  },
+  {
+    "title": "HSBC outlines digital banking and capital priorities",
+    "url": "https://www.hsbc.com/",
+    "publication": "HSBC",
+    "company": "HSBC",
+    "snippet": "HSBC highlighted ongoing digital banking investment and capital planning amid evolving UK regulatory expectations for operational resilience.",
+    "hours_ago": 8,
+    "query": "HSBC regulation latest"
+  },
+  {
+    "title": "Goldman Sachs partners with American Express on corporate cash management",
+    "url": "https://www.cnbc.com/2021/10/20/goldman-sachs-enlists-american-express-to-take-on-cash-management-titans-like-citigroup.html",
+    "publication": "CNBC",
+    "company": "Goldman Sachs",
+    "snippet": "Goldman integrated AmEx virtual-card technology into its transaction-banking platform to give corporate treasurers real-time payment visibility.",
+    "hours_ago": 5,
+    "query": "Goldman Sachs partnerships latest"
+  },
+  {
+    "title": "Morgan Stanley to open wealth management funnel to AI agents",
+    "url": "https://www.cnbc.com/2026/06/03/ai-agents-morgan-stanley-wealth-management-funnel.html",
+    "publication": "CNBC",
+    "company": "Morgan Stanley",
+    "snippet": "Morgan Stanley plans to let corporate clients' AI agents pull data from ShareWorks and Equity Edge, expanding its wealth-management technology funnel.",
+    "hours_ago": 7,
+    "query": "Morgan Stanley cybersecurity latest"
+  },
+  {
+    "title": "UBS advances cloud and technology modernization for wealth platforms",
+    "url": "https://www.ubs.com/global/en.html",
+    "publication": "UBS",
+    "company": "UBS",
+    "snippet": "UBS continues multi-year technology modernization intended to reduce operating risk across wealth-management platforms.",
+    "hours_ago": 9,
+    "query": "UBS technology latest"
+  },
+  {
+    "title": "Fidelity publishes guidance on artificial intelligence for investors and advisors",
+    "url": "https://www.fidelity.com/learning-center/trading-investing/artificial-intelligence",
+    "publication": "Fidelity",
+    "company": "Fidelity",
+    "snippet": "Fidelity outlined how AI-assisted research and analysis tools can help advisors synthesize market commentary faster while managing model risk.",
+    "hours_ago": 3,
+    "query": "Fidelity artificial intelligence latest"
+  },
+  {
+    "title": "Bank of America stock rises 3% on strong trading day",
+    "url": "https://newsroom.bankofamerica.com/",
+    "publication": "MarketWire",
+    "company": "Bank of America",
+    "snippet": "Shares of Bank of America climbed after a broad market rally lifted financials.",
+    "hours_ago": 2,
+    "query": "Bank of America share price"
+  },
+  {
+    "title": "Citigroup executives to speak at fintech summit in London",
+    "url": "https://www.citigroup.com/global/news/press-release",
+    "publication": "EventDaily",
+    "company": "Citigroup",
+    "snippet": "Citigroup leaders are scheduled to appear on a conference panel about payments innovation.",
+    "hours_ago": 5,
+    "query": "Citigroup conference"
+  },
+  {
+    "title": "JPMorgan expands generative AI platform for institutional client workflows",
+    "url": "https://www.cnbc.com/2025/09/30/jpmorgan-chase-fully-ai-connected-megabank.html",
+    "publication": "CNBC",
+    "company": "JPMorgan Chase",
+    "snippet": "A second outlet reports JPMorgan is expanding generative AI access across institutional client-facing teams via its internal LLM Suite.",
+    "hours_ago": 4,
+    "query": "JPMorgan Chase artificial intelligence latest"
+  },
+  {
+    "title": "Vanguard explores digital advice tooling for retirement participants",
+    "url": "https://www.vanguard.com/",
+    "publication": "Vanguard",
+    "company": "Vanguard",
+    "snippet": "Vanguard is exploring partnerships and product enhancements to strengthen digital advice capabilities for retirement plan participants.",
+    "hours_ago": 11,
+    "query": "Vanguard partnerships latest"
+  },
+  {
+    "title": "Barclays strengthens operational resilience after payments disruption review",
+    "url": "https://www.barclays.co.uk/",
+    "publication": "Barclays",
+    "company": "Barclays",
+    "snippet": "Barclays outlined operational upgrades following an internal review of a payments outage affecting online and mobile banking.",
+    "hours_ago": 10,
+    "query": "Barclays operational developments latest"
+  }
+]
