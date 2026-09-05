@@ -25,28 +25,72 @@ GMAIL_TOKEN_FILE=token.json
 
 ## Run
 
+Open the project folder first:
+
 ```bash
-# offline sample data
+cd "C:\Users\Prachi Ambavale\OneDrive\Desktop\Bank"
+.venv\Scripts\activate
+```
+
+### Quick commands
+
+```bash
+# offline demo (sample articles; safest for review)
 python main.py --run-now --demo
 
-# live run
+# live one-shot brief (needs network / optional API keys)
 python main.py --run-now
 
-# daily at 9:00 (config.yaml timezone)
+# daily 9:00 AM IST loop — keep terminal open; stop with Ctrl+C
 python main.py --schedule
 
-# feedback
+# run once now, then wait for every following 9:00 AM
+python main.py --schedule --run-now
+
+# scheduled run using sample articles
+python main.py --schedule --demo
+
+# preference feedback
 python main.py --feedback more --topic "artificial intelligence"
+python main.py --feedback less --company "Bank of America"
+
+# optional Google Calendar 9 AM reminder
+python main.py --sync-calendar
 
 # tests
 pytest -q
 ```
 
-Output:
-- `sample_email.html`
-- `data/runs/brief_*.html` (when `DRY_RUN=true`)
+### 9:00 AM morning brief
 
-For real Gmail send: set `DRY_RUN=false`, add `credentials.json`, then run again.
+Config in `config.yaml` (already set):
+
+- `email_hour: 9`
+- `email_minute: 0`
+- `timezone: Asia/Kolkata` (IST)
+
+```bash
+# leave running overnight for the daily 9 AM brief
+python main.py --schedule
+
+# test the brief right now (do not wait until morning)
+python main.py --run-now --demo
+# or live:
+python main.py --run-now
+```
+
+Notes:
+
+- `--schedule` alone waits until the **next 09:00 IST**, then runs every day.
+- `--schedule --run-now` runs once immediately, then waits for each following 9 AM.
+- Keep the terminal open while the scheduler is running. Stop with `Ctrl+C`.
+
+### Output
+
+- `sample_email.html`
+- `data/runs/brief_YYYYMMDD_HHMMSS.html` (when `DRY_RUN=true`)
+
+For real Gmail send: set `DRY_RUN=false`, add `credentials.json`, fill `EMAIL_TO` / `EMAIL_FROM`, then run again.
 
 ## Files
 
