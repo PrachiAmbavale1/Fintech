@@ -89,8 +89,8 @@ def ensure_daily_brief_event(config_path: str | Path = "config.yaml") -> str | N
     )
 
     body = {
-        "summary": "FinTech Intelligence Brief",
-        "description": "Daily fintech brief reminder.",
+        "summary": "Fintech Daily Brief",
+        "description": "Daily fintech news brief.",
         "start": {"dateTime": start.isoformat(), "timeZone": tz_name},
         "end": {"dateTime": end.isoformat(), "timeZone": tz_name},
         "recurrence": ["RRULE:FREQ=DAILY"],

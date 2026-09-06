@@ -1,14 +1,10 @@
-# FinTech Intelligence Agent
+# Fintech Daily Brief
 
-Daily fintech brief: last-24-hour news for watched banks/asset managers → ranked HTML email.
+Python pipeline that pulls fintech news for a configured bank/asset-manager watchlist, keeps items from the last 24 hours, ranks them, and sends an HTML email brief.
 
-## Requirements
+Stack: search APIs + LLM classification/summarization (Groq or OpenAI) + Gmail API. Local schedule via CLI; production schedule via GitHub Actions cron (09:00 IST).
 
-- Python 3.10+
-- Groq API key (or OpenAI)
-- Gmail OAuth (`credentials.json`) to send mail
-
-## Setup (Windows)
+## Setup
 
 ```powershell
 cd "C:\path\to\Fintech Project"
@@ -17,7 +13,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the project root:
+Add a `.env` in the project root:
 
 ```
 GROQ_API_KEY=
@@ -32,56 +28,31 @@ GMAIL_CREDENTIALS_FILE=credentials.json
 GMAIL_TOKEN_FILE=token.json
 ```
 
-- Multiple recipients: `EMAIL_TO=a@gmail.com,b@gmail.com`
-- Put Google OAuth desktop credentials at `credentials.json`
-- First real send creates `token.json` via browser login
-- Do not commit `.env`, `credentials.json`, or `token.json`
+`EMAIL_TO` accepts comma-separated addresses. Place Google OAuth desktop credentials as `credentials.json`; the first live send writes `token.json`. Keep `.env`, `credentials.json`, and `token.json` out of git.
 
-Optional: edit companies/topics/timezone in `config.yaml`.
+Watchlist and timing live in `config.yaml` (`email_hour`, `timezone`, `lookback_hours`).
 
-## Commands
+## Run
 
 ```powershell
 .\.venv\Scripts\activate
-
-python main.py --run-now
-python main.py --schedule
+python main.py --run-now      # one live brief now
+python main.py --schedule     # wait for next 09:00 IST, then every day
 ```
 
-| Command | What it does |
-| --- | --- |
-| `--run-now` | Live last-24h brief abhi bhejo |
-| `--schedule` | Har din 9:00 AM IST pe automatic (terminal open rakhna padega) |
+With `DRY_RUN=true`, output is written to `sample_email.html` and `data/runs/`. Set `DRY_RUN=false` to send mail.
 
-`DRY_RUN=true` → writes `sample_email.html` and `data/runs/`.  
-`DRY_RUN=false` → sends Gmail.
+GitHub Actions workflow `.github/workflows/daily-brief.yml` runs the same job on a cron without keeping a machine online. Configure repo secrets for keys and Gmail JSON.
 
-## macOS / Linux
+## Layout
 
-```bash
-cd /path/to/Fintech\ Project
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Then create `.env` as above and use the same `python main.py` commands.
-
-## Project layout
-
-```
-main.py            CLI
-agent.py           pipeline
-search.py          news search
-filters.py         filters + dedupe
-ranking.py         ranking
-memory.py          preferences (SQLite)
-email_out.py       HTML + Gmail
-models.py          models
-scheduler.py       local daily loop
-calendar_tool.py   optional calendar
-config.yaml        watchlist + settings
-requirements.txt
-data/
-tests/
-```
+- `main.py` – CLI
+- `agent.py` – end-to-end run
+- `search.py` – news retrieval
+- `filters.py` – lookback, exclusions, dedupe
+- `ranking.py` – scoring
+- `memory.py` – preference store (SQLite)
+- `email_out.py` – HTML + Gmail
+- `scheduler.py` – local daily loop
+- `config.yaml` – companies, topics, settings
+- `tests/` – pipeline tests

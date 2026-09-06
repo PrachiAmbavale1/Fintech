@@ -21,28 +21,28 @@ def setup_logging() -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="FinTech Intelligence Agent")
-    p.add_argument("--run-now", action="store_true", help="Run the daily brief immediately")
+    p = argparse.ArgumentParser(description="Fintech daily news brief")
+    p.add_argument("--run-now", action="store_true", help="Run one brief now")
     p.add_argument(
         "--schedule",
         action="store_true",
-        help="Keep running and send the brief daily at config email_hour (default 09:00)",
+        help="Run daily at email_hour from config.yaml",
     )
-    p.add_argument("--demo", action="store_true", help="Use bundled sample articles (offline-friendly)")
-    p.add_argument("--feedback", choices=["more", "less", "neutral"], help="Record explicit preference feedback")
-    p.add_argument("--topic", type=str, help="Topic for feedback, e.g. 'artificial intelligence'")
-    p.add_argument("--company", type=str, help="Company for feedback")
+    p.add_argument("--demo", action="store_true", help="Use sample articles instead of live search")
+    p.add_argument("--feedback", choices=["more", "less", "neutral"], help="Update topic/company preference")
+    p.add_argument("--topic", type=str, help="Topic for --feedback")
+    p.add_argument("--company", type=str, help="Company for --feedback")
     p.add_argument("--config", type=str, default="config.yaml")
     p.add_argument(
         "--sync-calendar",
         action="store_true",
-        help="Optional: create/update a Google Calendar daily reminder for the brief",
+        help="Create or update the Google Calendar reminder",
     )
     return p.parse_args()
 
 
 def print_brief(brief) -> None:
-    print("\n=== Daily Brief Ready ===")
+    print("\nBrief ready")
     print(f"Subject : {brief.subject}")
     print(f"Stories : {len(brief.stories)}")
     print(f"Raw     : {brief.raw_count} | Relevant: {brief.relevant_count} | Rounds: {brief.search_rounds}")
@@ -90,12 +90,8 @@ def main() -> int:
         def job() -> None:
             run_once(args, memory)
 
-        print(
-            "Scheduler on - daily brief at "
-            "settings.email_hour / settings.timezone from config.yaml"
-        )
-        print("Keep this terminal open (or run as a Windows service / Task Scheduler job).")
-        print("Stop with Ctrl+C.\n")
+        print(f"Scheduler started ({args.config}: email_hour / timezone)")
+        print("Leave this process running. Ctrl+C to stop.\n")
         run_daily_scheduler(
             job,
             config_path=args.config,
@@ -105,7 +101,7 @@ def main() -> int:
 
     if not args.run_now and not args.feedback:
         args.run_now = True
-        print("No flags given - running brief now. Use --demo for sample data.")
+        print("No flags passed; running one brief. Add --demo for sample data.")
 
     if args.run_now:
         run_once(args, memory)

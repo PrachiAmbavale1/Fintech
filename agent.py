@@ -452,14 +452,14 @@ class Orchestrator:
 
         if not summarized:
             placeholder = Article(
-                title="No material developments above threshold",
-                url="https://example.com/fintech-intelligence",
+                title="No stories cleared the relevance threshold",
+                url="https://example.com/no-stories",
                 publication="System",
                 synopsis=(
-                    "The agent reviewed available sources for the last 24 hours and did not find "
-                    "enough company-specific developments that cleared exclusion and relevance gates."
+                    "Search and filtering for the last 24 hours did not return enough "
+                    "company-specific items that passed exclusion and relevance checks."
                 ),
-                why_it_matters="A quiet brief is preferable to padding with share-price or conference noise.",
+                why_it_matters="Better to send an empty brief than low-signal market or event noise.",
                 relevance_score=0,
                 final_score=0,
             )

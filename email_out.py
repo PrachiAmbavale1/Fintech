@@ -30,7 +30,7 @@ EMAIL_TEMPLATE = Template(
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>FinTech Intelligence Brief</title>
+  <title>Fintech Daily Brief</title>
 </head>
 <body style="margin:0;padding:0;background:#f4f6f8;font-family:Georgia,'Times New Roman',serif;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f6f8;padding:24px 12px;">
@@ -39,9 +39,8 @@ EMAIL_TEMPLATE = Template(
         <table role="presentation" width="640" cellspacing="0" cellpadding="0" style="background:#ffffff;border:1px solid #e5e7eb;">
           <tr>
             <td style="padding:28px 32px 12px 32px;border-bottom:2px solid #0f2744;">
-              <div style="font-size:12px;letter-spacing:0.12em;color:#6b7280;text-transform:uppercase;">Daily Brief</div>
-              <h1 style="margin:8px 0 4px 0;font-size:26px;color:#0f2744;">FinTech Intelligence Brief</h1>
-              <div style="color:#4b5563;font-size:14px;">{{ date_str }} · Last 24 hours · {{ story_count }} material developments</div>
+              <h1 style="margin:0 0 4px 0;font-size:26px;color:#0f2744;">Fintech Daily Brief</h1>
+              <div style="color:#4b5563;font-size:14px;">{{ date_str }} · last 24 hours · {{ story_count }} stories</div>
             </td>
           </tr>
 
@@ -102,7 +101,7 @@ def render_email(
         stories=stories,
         watchlist=watchlist or [],
     )
-    subject = f"FinTech Intelligence Brief — {date_str} ({len(stories)} developments)"
+    subject = f"Fintech Daily Brief — {date_str} ({len(stories)} stories)"
     return DailyBrief(
         generated_at=generated_at,
         timezone=timezone_name,
@@ -181,7 +180,7 @@ def _send_gmail(recipients: list[str], subject: str, html_body: str) -> str:
                     f"Missing {creds_file}. Enable Gmail API and download OAuth client credentials."
                 )
             flow = InstalledAppFlow.from_client_secrets_file(creds_file, scopes)
-            print("\n=== Gmail auth ===")
+            print("\nGmail auth")
             print("1) Open the browser URL")
             print("2) Login with EMAIL_FROM")
             print("3) Allow access, then come back here\n")

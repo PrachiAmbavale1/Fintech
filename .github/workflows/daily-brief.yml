@@ -1,4 +1,4 @@
-name: Daily FinTech Brief
+name: daily-brief
 
 on:
   schedule:
