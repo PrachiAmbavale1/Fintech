@@ -41,7 +41,6 @@ class Orchestrator:
         groq_key = os.getenv("GROQ_API_KEY", "").strip()
         openai_key = os.getenv("OPENAI_API_KEY", "").strip()
 
-        # gsk key sometimes lands in OPENAI_API_KEY
         if not groq_key and openai_key.startswith("gsk_"):
             groq_key = openai_key
             openai_key = ""
@@ -166,7 +165,6 @@ class Orchestrator:
         if not text:
             raise ValueError("Empty LLM content")
 
-        # drop ```json fences if the model adds them
         if "```" in text:
             start = text.find("{")
             end = text.rfind("}")

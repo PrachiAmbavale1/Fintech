@@ -113,6 +113,24 @@ def render_email(
     )
 
 
+def parse_recipients(raw: str | None) -> list[str]:
+    if not raw:
+        return []
+    parts = []
+    for chunk in raw.replace(";", ",").split(","):
+        addr = chunk.strip()
+        if addr:
+            parts.append(addr)
+    seen: set[str] = set()
+    out: list[str] = []
+    for addr in parts:
+        key = addr.lower()
+        if key not in seen:
+            seen.add(key)
+            out.append(addr)
+    return out
+
+
 def send_daily_brief(
     recipient: str,
     subject: str,
@@ -121,6 +139,7 @@ def send_daily_brief(
     dry_run: bool = True,
     output_dir: str | Path = "data/runs",
 ) -> str:
+    recipients = parse_recipients(recipient)
     if dry_run or os.getenv("DRY_RUN", "true").lower() in {"1", "true", "yes"}:
         out = Path(output_dir)
         out.mkdir(parents=True, exist_ok=True)
@@ -128,13 +147,19 @@ def send_daily_brief(
         path = out / f"brief_{stamp}.html"
         path.write_text(html_body, encoding="utf-8")
         Path("sample_email.html").write_text(html_body, encoding="utf-8")
-        logger.info("DRY_RUN: wrote email to %s", path)
+        logger.info(
+            "DRY_RUN: wrote email to %s (would send to: %s)",
+            path,
+            ", ".join(recipients) if recipients else "(none)",
+        )
         return str(path)
 
-    return _send_gmail(recipient, subject, html_body)
+    if not recipients:
+        raise ValueError("EMAIL_TO is empty — add at least one recipient email")
+    return _send_gmail(recipients, subject, html_body)
 
 
-def _send_gmail(recipient: str, subject: str, html_body: str) -> str:
+def _send_gmail(recipients: list[str], subject: str, html_body: str) -> str:
     from google.auth.transport.requests import Request
     from google.oauth2.credentials import Credentials
     from google_auth_oauthlib.flow import InstalledAppFlow
@@ -164,11 +189,15 @@ def _send_gmail(recipient: str, subject: str, html_body: str) -> str:
         Path(token_file).write_text(creds.to_json(), encoding="utf-8")
 
     service = build("gmail", "v1", credentials=creds)
-    message = MIMEText(html_body, "html")
-    message["to"] = recipient
-    message["from"] = os.getenv("EMAIL_FROM", recipient)
-    message["subject"] = subject
-    raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
-    sent = service.users().messages().send(userId="me", body={"raw": raw}).execute()
-    logger.info("Gmail sent message id=%s", sent.get("id"))
-    return sent.get("id", "")
+    sender = os.getenv("EMAIL_FROM", recipients[0])
+    last_id = ""
+    for to_addr in recipients:
+        message = MIMEText(html_body, "html")
+        message["to"] = to_addr
+        message["from"] = sender
+        message["subject"] = subject
+        raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+        sent = service.users().messages().send(userId="me", body={"raw": raw}).execute()
+        last_id = sent.get("id", "")
+        logger.info("Gmail sent message id=%s to=%s", last_id, to_addr)
+    return last_id

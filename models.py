@@ -53,7 +53,6 @@ def _as_score(v: Any, default: float = 5.0) -> float:
         x = float(v)
     except (TypeError, ValueError):
         return default
-    # some models give 0-100
     if x > 10:
         x = x / 10.0
     return max(0.0, min(10.0, x))

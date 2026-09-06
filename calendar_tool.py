@@ -54,7 +54,6 @@ def ensure_daily_brief_event(config_path: str | Path = "config.yaml") -> str | N
     if Path(token_file).exists():
         creds = Credentials.from_authorized_user_file(token_file, scopes)
 
-    # skip if token is gmail-only
     if creds and creds.valid and not creds.has_scopes([CALENDAR_SCOPE]):
         logger.info("Calendar sync skipped - token has Gmail only")
         return None

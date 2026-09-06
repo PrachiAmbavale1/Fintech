@@ -71,7 +71,6 @@ def run_daily_scheduler(
             wait_s / 3600.0,
         )
 
-        # sleep in small chunks so Ctrl+C works
         deadline = time.time() + wait_s
         while time.time() < deadline:
             remaining = deadline - time.time()

@@ -218,7 +218,6 @@ class PreferenceMemory:
                 )
 
     def learn_from_brief(self, stories: list[Article], *, weight: float = 0.03) -> None:
-        # small bump for topics that made the brief
         if not stories:
             return
         now = datetime.now(timezone.utc).isoformat()

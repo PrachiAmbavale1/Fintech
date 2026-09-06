@@ -49,7 +49,7 @@ def test_scheduler_next_run_is_in_future():
     from scheduler import next_run_at, seconds_until
 
     tz = ZoneInfo("Asia/Kolkata")
-    now = datetime(2026, 9, 5, 10, 0, tzinfo=tz)  # after 9 AM IST
+    now = datetime(2026, 9, 5, 10, 0, tzinfo=tz)
     nxt = next_run_at(9, 0, "Asia/Kolkata", now=now)
     assert nxt.day == 6
     assert nxt.hour == 9

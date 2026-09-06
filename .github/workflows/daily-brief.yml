@@ -1,0 +1,59 @@
+name: Daily FinTech Brief
+
+on:
+  schedule:
+    - cron: "30 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  send-brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write Gmail auth files from secrets
+        env:
+          GMAIL_CREDENTIALS_JSON: ${{ secrets.GMAIL_CREDENTIALS_JSON }}
+          GMAIL_TOKEN_JSON: ${{ secrets.GMAIL_TOKEN_JSON }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+
+          creds = os.environ.get("GMAIL_CREDENTIALS_JSON", "").strip()
+          token = os.environ.get("GMAIL_TOKEN_JSON", "").strip()
+          if not creds or not token:
+              raise SystemExit(
+                  "Missing GMAIL_CREDENTIALS_JSON or GMAIL_TOKEN_JSON secret. "
+                  "Add both in GitHub → Settings → Secrets and variables → Actions."
+              )
+          Path("credentials.json").write_text(creds, encoding="utf-8")
+          Path("token.json").write_text(token, encoding="utf-8")
+          print("Wrote credentials.json and token.json")
+          PY
+
+      - name: Run daily brief and send email
+        env:
+          DRY_RUN: "false"
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GROQ_MODEL: ${{ secrets.GROQ_MODEL }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+          TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+          GMAIL_CREDENTIALS_FILE: credentials.json
+          GMAIL_TOKEN_FILE: token.json
+        run: python main.py --run-now

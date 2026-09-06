@@ -1,113 +1,87 @@
 # FinTech Intelligence Agent
 
-## Setup
+Daily fintech brief: last-24-hour news for watched banks/asset managers → ranked HTML email.
 
-```bash
+## Requirements
+
+- Python 3.10+
+- Groq API key (or OpenAI)
+- Gmail OAuth (`credentials.json`) to send mail
+
+## Setup (Windows)
+
+```powershell
+cd "C:\path\to\Fintech Project"
 python -m venv .venv
-.venv\Scripts\activate
+.\.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-Make a `.env` file in the project root:
+Create a `.env` file in the project root:
 
 ```
 GROQ_API_KEY=
 GROQ_MODEL=openai/gpt-oss-20b
 OPENAI_API_KEY=
 OPENAI_MODEL=gpt-4o-mini
-EMAIL_TO=
-EMAIL_FROM=
+EMAIL_TO=you@gmail.com
+EMAIL_FROM=you@gmail.com
 DRY_RUN=true
 TAVILY_API_KEY=
 GMAIL_CREDENTIALS_FILE=credentials.json
 GMAIL_TOKEN_FILE=token.json
 ```
 
-## Run
+- Multiple recipients: `EMAIL_TO=a@gmail.com,b@gmail.com`
+- Put Google OAuth desktop credentials at `credentials.json`
+- First real send creates `token.json` via browser login
+- Do not commit `.env`, `credentials.json`, or `token.json`
 
-Open the project folder first:
+Optional: edit companies/topics/timezone in `config.yaml`.
 
-```bash
-cd "C:\Users\Prachi Ambavale\OneDrive\Desktop\Bank"
-.venv\Scripts\activate
-```
+## Commands
 
-### Quick commands
+```powershell
+.\.venv\Scripts\activate
 
-```bash
-# offline demo (sample articles; safest for review)
-python main.py --run-now --demo
-
-# live one-shot brief (needs network / optional API keys)
 python main.py --run-now
-
-# daily 9:00 AM IST loop — keep terminal open; stop with Ctrl+C
 python main.py --schedule
-
-# run once now, then wait for every following 9:00 AM
-python main.py --schedule --run-now
-
-# scheduled run using sample articles
-python main.py --schedule --demo
-
-# preference feedback
-python main.py --feedback more --topic "artificial intelligence"
-python main.py --feedback less --company "Bank of America"
-
-# optional Google Calendar 9 AM reminder
-python main.py --sync-calendar
-
-# tests
-pytest -q
 ```
 
-### 9:00 AM morning brief
+| Command | What it does |
+| --- | --- |
+| `--run-now` | Live last-24h brief abhi bhejo |
+| `--schedule` | Har din 9:00 AM IST pe automatic (terminal open rakhna padega) |
 
-Config in `config.yaml` (already set):
+`DRY_RUN=true` → writes `sample_email.html` and `data/runs/`.  
+`DRY_RUN=false` → sends Gmail.
 
-- `email_hour: 9`
-- `email_minute: 0`
-- `timezone: Asia/Kolkata` (IST)
+## macOS / Linux
 
 ```bash
-# leave running overnight for the daily 9 AM brief
-python main.py --schedule
-
-# test the brief right now (do not wait until morning)
-python main.py --run-now --demo
-# or live:
-python main.py --run-now
+cd /path/to/Fintech\ Project
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-Notes:
+Then create `.env` as above and use the same `python main.py` commands.
 
-- `--schedule` alone waits until the **next 09:00 IST**, then runs every day.
-- `--schedule --run-now` runs once immediately, then waits for each following 9 AM.
-- Keep the terminal open while the scheduler is running. Stop with `Ctrl+C`.
-
-### Output
-
-- `sample_email.html`
-- `data/runs/brief_YYYYMMDD_HHMMSS.html` (when `DRY_RUN=true`)
-
-For real Gmail send: set `DRY_RUN=false`, add `credentials.json`, fill `EMAIL_TO` / `EMAIL_FROM`, then run again.
-
-## Files
+## Project layout
 
 ```
-main.py              entry / CLI
-agent.py             main pipeline
-search.py            news search
-filters.py           hard filters + dedupe
-ranking.py           ranking
-memory.py            sqlite preferences
-email_out.py         html email + gmail send
-models.py            data models
-scheduler.py         daily schedule loop
-calendar_tool.py     optional google calendar reminder
-config.yaml          companies / topics / settings
-requirements.txt     deps
-sample_email.html    last brief html
-data/sample_articles.json
-tests/test_pipeline.py
+main.py            CLI
+agent.py           pipeline
+search.py          news search
+filters.py         filters + dedupe
+ranking.py         ranking
+memory.py          preferences (SQLite)
+email_out.py       HTML + Gmail
+models.py          models
+scheduler.py       local daily loop
+calendar_tool.py   optional calendar
+config.yaml        watchlist + settings
+requirements.txt
+data/
+tests/
 ```
