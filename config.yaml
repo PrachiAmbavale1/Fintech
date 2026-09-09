@@ -51,8 +51,8 @@ settings:
   max_search_rounds: 2
   min_stories_target: 5
   retry_count: 2
-  email_hour: 9
-  email_minute: 0
+  email_hour: 21
+  email_minute: 20
   timezone: Asia/Kolkata
   dry_run: true
 

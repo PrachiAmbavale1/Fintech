@@ -56,6 +56,33 @@ def test_scheduler_next_run_is_in_future():
     assert seconds_until(nxt, now=now) > 0
 
 
+def test_align_send_skips_wait_after_nine_ist():
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    from scheduler import todays_send_at, wait_until_clock
+
+    tz = ZoneInfo("Asia/Kolkata")
+    now = datetime(2026, 9, 9, 9, 5, tzinfo=tz)
+    target = todays_send_at(9, 0, "Asia/Kolkata", now=now)
+    assert target.hour == 9 and target.minute == 0
+    assert wait_until_clock(9, 0, "Asia/Kolkata", now=now) is False
+
+
+def test_kolkata_offset_is_plus_530():
+    from datetime import datetime, timedelta
+    from zoneinfo import ZoneInfo
+
+    from scheduler import _zoneinfo
+
+    tz = _zoneinfo("Asia/Kolkata")
+    # Either IANA zone or fixed +05:30 fallback — offset must be Mumbai time.
+    noon_utc = datetime(2026, 6, 1, 12, 0, tzinfo=ZoneInfo("UTC"))
+    local = noon_utc.astimezone(tz)
+    assert local.utcoffset() == timedelta(hours=5, minutes=30)
+    assert local.hour == 17 and local.minute == 30
+
+
 def test_ranking_prefers_boosted_topics():
     ai = _art("BlackRock AI strategy update", "https://ex.com/ai", company="BlackRock", pub="Reuters")
     ai.category = "artificial intelligence"

@@ -21,6 +21,11 @@ def _zoneinfo(name: str):
 
         return ZoneInfo(name)
     except Exception:
+        from datetime import timedelta
+
+        if name in {"Asia/Kolkata", "Asia/Calcutta"}:
+            logger.warning("Timezone %s missing; using fixed UTC+05:30", name)
+            return dt_timezone(timedelta(hours=5, minutes=30))
         logger.warning("Timezone %s missing, using UTC", name)
         return dt_timezone.utc
 

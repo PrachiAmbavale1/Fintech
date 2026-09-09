@@ -2,13 +2,15 @@ name: daily-brief
 
 on:
   schedule:
-    - cron: "30 3 * * *"
+    # TEST tonight: send at 21:20 IST (15:50 UTC). Start ~5 min early so cron can still fire.
+    # Revert after test → email 9:00 + cron "15 3 * * *"
+    - cron: "45 15 * * *"
   workflow_dispatch:
 
 jobs:
   send-brief:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -56,4 +58,4 @@ jobs:
           TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
           GMAIL_CREDENTIALS_FILE: credentials.json
           GMAIL_TOKEN_FILE: token.json
-        run: python main.py --run-now
+        run: python main.py --run-now --align-send

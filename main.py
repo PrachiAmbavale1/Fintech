@@ -34,6 +34,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--company", type=str, help="Company for --feedback")
     p.add_argument("--config", type=str, default="config.yaml")
     p.add_argument(
+        "--align-send",
+        action="store_true",
+        help="After building the brief, wait until config email_hour/minute (Asia/Kolkata) before sending",
+    )
+    p.add_argument(
         "--sync-calendar",
         action="store_true",
         help="Create or update the Google Calendar reminder",
@@ -56,7 +61,7 @@ def print_brief(brief) -> None:
 
 def run_once(args, memory: PreferenceMemory):
     orch = Orchestrator(config_path=args.config, memory=memory, use_sample=args.demo)
-    brief = orch.run()
+    brief = orch.run(align_send=bool(getattr(args, "align_send", False)))
     print_brief(brief)
     return brief
 

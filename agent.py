@@ -26,6 +26,7 @@ class Orchestrator:
         memory: PreferenceMemory | None = None,
         use_sample: bool = False,
     ) -> None:
+        self.config_path = Path(config_path)
         self.config = self._load_config(config_path)
         self.settings = self.config["settings"]
         self.memory = memory or PreferenceMemory("data/memory.db")
@@ -379,7 +380,7 @@ class Orchestrator:
             items.append(f"{company} - {label}")
         return items
 
-    def run(self) -> DailyBrief:
+    def run(self, *, align_send: bool = False) -> DailyBrief:
         preferences = self.memory.load_preferences()
         exclude_keywords = list(self.config["topics"]["exclude"])
         lookback = int(self.settings.get("lookback_hours", 24))
@@ -478,6 +479,13 @@ class Orchestrator:
         dry_run = bool(self.settings.get("dry_run", True))
         if os.getenv("DRY_RUN") is not None:
             dry_run = os.getenv("DRY_RUN", "true").lower() in {"1", "true", "yes"}
+
+        # Build early, send exactly at email_hour in Asia/Kolkata (or configured tz).
+        # GitHub Actions cron alone is often late; this holds the send until 09:00 IST.
+        if align_send:
+            from scheduler import wait_for_config_send_time
+
+            wait_for_config_send_time(self.config_path)
 
         send_daily_brief(
             recipient=os.getenv("EMAIL_TO", "executive@example.com"),
