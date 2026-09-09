@@ -2,9 +2,9 @@ name: daily-brief
 
 on:
   schedule:
-    # TEST tonight: send at 21:20 IST (15:50 UTC). Start ~5 min early so cron can still fire.
+    # TEST tonight: send at 21:40 IST (16:10 UTC). Start ~5 min early so cron can still fire.
     # Revert after test → email 9:00 + cron "15 3 * * *"
-    - cron: "45 15 * * *"
+    - cron: "5 16 * * *"
   workflow_dispatch:
 
 jobs:
